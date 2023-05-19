@@ -60,10 +60,13 @@ class ProveedorController extends Controller
     public function show($id)
     {
 
-        $response = Http::withOptions(['verify' => false])->get('https://quirky-mahavira.217-76-154-49.plesk.page/api/proveedores/' . $id);
-        $jsonString = $response->body();
-        $proveedor = json_decode($jsonString, true);
-        return view('proveedores.show', ['proveedor' => $proveedor]);
+        $response = Http::withOptions(['verify' => false])->get('https://quirky-mahavira.217-76-154-49.plesk.page/api/proveedores/'.$id);
+        
+            $jsonString = $response->body();
+        $proveedor = json_decode($jsonString);
+
+        return view('proveedores.show', ['proveedor' => $proveedor[0]]);
+
     }
 
     /**
