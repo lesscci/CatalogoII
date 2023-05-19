@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+
 use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\Controller;
 use App\Models\Proveedor;
@@ -18,10 +19,9 @@ class ProveedorController extends Controller
     {
 
         $response = Http::withOptions(['verify' => false])->get('https://quirky-mahavira.217-76-154-49.plesk.page/api/proveedores');
-            $jsonString = $response->body();
-            $data = json_decode($jsonString);
-            return view('proveedores.index', compact('data'));
-            
+        $jsonString = $response->body();
+        $data = json_decode($jsonString);
+        return view('proveedores.index', compact('data'));
     }
 
 
@@ -40,20 +40,19 @@ class ProveedorController extends Controller
     public function store(Request $request)
     {
         $response = Http::withOptions(['verify' => false])->get('https://quirky-mahavira.217-76-154-49.plesk.page/api/proveedores');
-        $proveedor = $request -> validate([
-        "nombre"=>"required",
-        "direccion"=> "required",
-        "telefono" => "required"
+        $proveedor = $request->validate([
+            "nombre" => "required",
+            "direccion" => "required",
+            "telefono" => "required"
         ]);
 
         $response->$request("POST", "proveedores", [
-              "nombre"=>$proveedor['nombre'],
-        "direccion"=> $proveedor['direccion'],
-        "telefono" => $proveedor['telefono']
+            "nombre" => $proveedor['nombre'],
+            "direccion" => $proveedor['direccion'],
+            "telefono" => $proveedor['telefono']
         ]);
 
         return redirect()->route("proveedores");
-      
     }
     /**
      * Display the specified resource.
@@ -61,10 +60,10 @@ class ProveedorController extends Controller
     public function show($id)
     {
 
-        $response = Http::withOptions(['verify' => false])->get('https://quirky-mahavira.217-76-154-49.plesk.page/api/proveedores/'.$id);
-            $jsonString = $response->body();
-            $proveedor = json_decode($jsonString, true);
-            return view('proveedores.show', ['proveedor' => $proveedor]);
+        $response = Http::withOptions(['verify' => false])->get('https://quirky-mahavira.217-76-154-49.plesk.page/api/proveedores/' . $id);
+        $jsonString = $response->body();
+        $proveedor = json_decode($jsonString, true);
+        return view('proveedores.show', ['proveedor' => $proveedor]);
     }
 
     /**
