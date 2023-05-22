@@ -1,19 +1,19 @@
 <x-app-layout>
     <x-slot name="header">
-        <h1 class="text-2xl font-bold">Detalles del Proveedor</h1>
+        <h1 class="text-2xl font-bold">Detalles del Producto</h1>
     </x-slot>
 
     <div class="py-6 px-4 sm:px-6 lg:px-8">
         <div class="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg">
             <div class="px-6 py-4">
-                @if ($proveedor)
-                    <h2 class="text-lg font-bold">{{ $proveedor->nombre}}</h2>
-                    <p class="text-gray-500">ID: {{ $proveedor->id }}</p>
-                    <p class="text-gray-500">Descripción: {{ $proveedor->descripcion }}</p>
-                    <p class="text-gray-500">Precio: {{ $proveedor->precio }}</p>
+                @if ($producto)
+                    <h2 class="text-lg font-bold">{{ $producto->nombre}}</h2>
+                    <p class="text-gray-500">ID: {{ $producto->id }}</p>
+                    <p class="text-gray-500">Descripción: {{ $producto->descripcion }}</p>
+                    <p class="text-gray-500">Precio: {{ $producto   ->precio }}</p>
                     <p class="text-gray-500">Acciones: <!-- Agrega aquí los enlaces para editar y eliminar --></p>
                 @else
-                    <p>No se encontró el proveedor.</p>
+                    <p>No se encontró el producto.</p>
                 @endif
             </div>
         </div>

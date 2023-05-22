@@ -7,19 +7,27 @@ use App\Models\Producto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
-class ProductoController extends Controller
+class ProductController extends Controller
 {
+
+    // ...
+
+
+    // ...
+
+    /**
+     * Add a product to the shopping cart.
+     */
+ 
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-
-        $response = Http::withOptions(['verify' => false])->get('https://quirky-mahavira.217-76-154-49.plesk.page/api/productos');
-
-          $jsonString = $response->body();
-            $data = json_decode($jsonString);
-           
+        $response = Http::withOptions(['verify' => false])->get('https://quirky-mahavira.217-76-154-49.plesk.page/api/products');
+        $data = $response->json()['data'];
+    
         return view('productos.index', compact('data'));
     }
 
@@ -52,15 +60,22 @@ class ProductoController extends Controller
      */
     public function show($id)
     {
-        return Producto::where('id', $id)->get();
+
+        $response = Http::withOptions(['verify' => false])->get('https://quirky-mahavira.217-76-154-49.plesk.page/api/productos/' . $id);
+
+        $jsonString = $response->body();
+        $producto = json_decode($jsonString);
+
+        return view('productos.show', ['producto' => $producto[0]]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Producto $producto)
+    public function edit($id)
     {
-        //
+        $producto = Producto::findOrFail($id);
+        return view('productos.edit', ['producto' => $producto]);
     }
 
     /**
@@ -68,39 +83,38 @@ class ProductoController extends Controller
      */
     public function update(Request $request, $id)
     {
-
         $producto = Producto::find($id);
 
         if (!$producto) {
-            return response()->json(['message' => 'Producto no encontrado'], 404);
+            return redirect()->back()->with('error', 'Producto no encontrado');
         }
 
-        // Update product attributes
         $producto->nombre = $request->input('nombre');
         $producto->descripcion = $request->input('descripcion');
         $producto->precio = $request->input('precio');
         $producto->proveedor_id = $request->input('proveedor_id');
         $producto->save();
 
-        // Return success response
-        return response()->json(['message' => 'Producto actualizado con éxito'], 200);
+        return redirect()->back()->with('success', 'Producto actualizado con éxito');
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy($id)
     {
-
         $producto = Producto::find($id);
 
         if (!$producto) {
-            return response()->json(['message' => 'Producto no encontrado'], 404);
+            return redirect()->back()->with('error', 'Producto no encontrado');
         }
-
 
         $producto->delete();
 
-        return response()->json(['message' => 'Producto eliminado con éxito'], 200);
+        return redirect()->back()->with('success', 'Producto eliminado con éxito');
     }
+
+
+    
 }

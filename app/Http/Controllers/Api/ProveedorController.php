@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\Controller;
 use App\Models\Proveedor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 
 class ProveedorController extends Controller
@@ -17,7 +18,6 @@ class ProveedorController extends Controller
 
 
     {
-
         $response = Http::withOptions(['verify' => false])->get('https://quirky-mahavira.217-76-154-49.plesk.page/api/proveedores');
         $jsonString = $response->body();
         $data = json_decode($jsonString);
@@ -45,14 +45,14 @@ class ProveedorController extends Controller
             "direccion" => "required",
             "telefono" => "required"
         ]);
-
-        $response->$request("POST", "proveedores", [
+    
+        $response = Http::withOptions(['verify' => false])->post("https://quirky-mahavira.217-76-154-49.plesk.page/api/proveedores", [
             "nombre" => $proveedor['nombre'],
             "direccion" => $proveedor['direccion'],
             "telefono" => $proveedor['telefono']
         ]);
-
-        return redirect()->route("proveedores");
+    
+        return redirect()->route("proveedores.index");
     }
     /**
      * Display the specified resource.
@@ -72,14 +72,19 @@ class ProveedorController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit()
+    public function edit($id)
     {
-        return view('proveedores.edit');
+        $proveedor = Proveedor::findOrFail($id);
+        return view('proveedores.edit', ['proveedor' => $proveedor]);
+        
     }
+    
 
     /**
      * Update the specified resource in storage.
      */
+ 
+
     public function update(Request $request, $id)
     {
         $this->validate($request, [
@@ -91,19 +96,27 @@ class ProveedorController extends Controller
             'direccion.required' => 'La dirección es obligatoria',
             'telefono.required' => 'El teléfono es obligatorio'
         ]);
-
+    
         $proveedor = Proveedor::findOrFail($id);
-
+    
         if (!$proveedor) {
-            return response()->json(['message' => 'Proveedor ' . $proveedor->nombre . ' no encontrado'], 404);
+            return redirect()->back()->with('error', 'Proveedor no encontrado');
         }
+    
         $proveedor->nombre = $request->input('nombre');
         $proveedor->direccion = $request->input('direccion');
         $proveedor->telefono = $request->input('telefono');
         $proveedor->save();
+    
+        // Almacenar notificación en la sesión flash
+        Session::flash('success', 'Proveedor actualizado con éxito');
+    
+        return redirect()->route('proveedores.index');
+    
+    
+    
+}
 
-        return response()->json(['message' => 'Proveedor ' . $proveedor->nombre . ' actualizado con éxito'], 200);
-    }
 
     /**
      * Remove the specified resource from storage.
@@ -111,13 +124,14 @@ class ProveedorController extends Controller
     public function destroy($id)
     {
         $proveedor = Proveedor::findOrFail($id);
-
+    
         if (!$proveedor) {
-            return response()->json(['message' => 'Proveedor no encontrado'], 404);
+            return redirect()->back()->with('error', 'Proveedor no encontrado');
         }
-
+    
         $proveedor->delete();
-
-        return response()->json(['message' => 'Proveedor eliminado con éxito'], 200);
+    
+        return redirect()->route('proveedores.index')->with('success', 'Proveedor eliminado con éxito');
     }
+    
 }
