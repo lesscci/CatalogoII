@@ -25,7 +25,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $response = Http::withOptions(['verify' => false])->get('https://quirky-mahavira.217-76-154-49.plesk.page/api/products');
+        $response = Http::withOptions(['verify' => false])->get
+        ('https://quirky-mahavira.217-76-154-49.plesk.page/api/products');
         $data = $response->json()['data'];
     
         return view('productos.index', compact('data'));
