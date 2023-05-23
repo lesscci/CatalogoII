@@ -26,3 +26,7 @@ require __DIR__ . '/auth.php';
     Route::get('/products', [ProductController::class, 'index'])->name('products.index');
   //  Route::post('/carrito/agregar', 'App\Http\Controllers\CarritoController@agregar')->name('carrito.agregar');
     Route::post('/carrito/agregar', [CarritoController::class, 'addToCart'])->name('carrito.agregar');
+
+
+    Route::get('/products/create', [ProductoController::class, 'create'])->name('productos.create');
+
