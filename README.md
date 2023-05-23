@@ -11,7 +11,7 @@ Agregar productos al carrito: Los usuarios pueden agregar productos al carrito h
 ## Instalación
 Para ejecutar este proyecto en tu entorno local, sigue estos pasos:
 
-##Clona este repositorio en tu máquina local.
+Clona este repositorio en tu máquina local.
 Asegúrate de tener instalado PHP y Composer en tu sistema.
 Ejecuta composer install en la raíz del proyecto para instalar las dependencias de Laravel.
 Crea una base de datos en tu servidor local y configura las credenciales de la base de datos en el archivo .env.
